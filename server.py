@@ -14,7 +14,7 @@ class UTF8Handler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Expires', '0')
         super().end_headers()
 
-PORT = 53823
+PORT = 53824
 Handler = UTF8Handler
 
 with socketserver.TCPServer(("", PORT), Handler) as httpd:

@@ -3,9 +3,26 @@
     --secondary-color: #3498db;
 }
 
+body {
+    display: flex;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
 .container {
-    max-width: 800px;
-    margin: 0 auto;
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 250px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.main-content {
+    flex-grow: 1;
     padding: 20px;
 }
 
@@ -21,9 +38,17 @@ input, select, button {
 }
 
 button {
-    background-color: var(--secondary-color);
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
     color: white;
+    border: none;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 .todo-item {
@@ -49,6 +74,124 @@ button {
 }
 
 .view-switch {
-    margin: 20px 0;
-    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.view-switch label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.view-switch input[type="radio"] {
+    accent-color: var(--secondary-color);
+    transform: scale(0.8); /* Make the radio button smaller */
+}
+
+.view-switch input[type="radio"]:checked + label {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.todo-item.completed {
+    text-decoration: line-through;
+    color: gray;
+    opacity: 0.6;
+}
+
+.priority-options {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.priority-options label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.priority-options input[type="radio"] {
+    accent-color: #007bff; /* Default color for radio buttons */
+}
+
+.priority-options input[type="radio"][value="3"] {
+    accent-color: red; /* Color for '重要紧急' */
+}
+
+.priority-options input[type="radio"][value="2"] {
+    accent-color: orange; /* Color for '重要不紧急' */
+}
+
+.priority-options input[type="radio"][value="1"] {
+    accent-color: yellow; /* Color for '紧急不重要' */
+}
+
+.priority-options input[type="radio"][value="0"] {
+    accent-color: green; /* Color for '不重要不紧急' */
+}
+
+.configuration {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.configuration h2 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: var(--primary-color);
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: nowrap;
+}
+
+.todo-item div {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px; /* Add some space between checkbox and text */
+}
+
+.todo-item input[type="checkbox"] {
+    transform: scale(1.2); /* Make the checkbox slightly larger */
+    cursor: pointer;
+}
+
+.todo-item button {
+    margin-left: 5px;
+    padding: 2px 5px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.view-switch {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.view-switch button {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.todo-item div:last-child {
+    width: 100px; /* Set a fixed width to prevent layout shift */
+    visibility: hidden; /* Use visibility instead of display */
+}
+
+.todo-item:hover div:last-child {
+    visibility: visible; /* Show the buttons when hovering over the todo item */
 }

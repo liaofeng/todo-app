@@ -1,47 +1,73 @@
-&lt;!DOCTYPE html&gt;
-&lt;html lang="zh-CN"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
-    &lt;title&gt;Todo List&lt;/title&gt;
-    &lt;link rel="stylesheet" href="style.css"&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class="container"&gt;
-        &lt;h1&gt;智能待办清单&lt;/h1&gt;
-        
-        &lt;form id="todoForm"&gt;
-            &lt;div class="form-group"&gt;
-                &lt;input type="text" id="title" placeholder="事项内容" required&gt;
-            &lt;/div&gt;
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Add New</h1>
             
-            &lt;div class="form-group"&gt;
-                &lt;select id="topic"&gt;
-                    &lt;option value=""&gt;选择或输入分类&lt;/option&gt;
-                &lt;/select&gt;
-                &lt;input type="text" id="newTopic" placeholder="新建分类"&gt;
-            &lt;/div&gt;
+            <form id="todoForm">
+                <div class="form-group">
+                    <input type="text" id="title" placeholder="事项内容" required>
+                </div>
+                
+                <div class="form-group">
+                    <select id="topic">
+                        <option value="">选择或输入分类</option>
+                    </select>
+                    <input type="text" id="newTopic" placeholder="新建分类">
+                </div>
 
-            &lt;div class="form-group"&gt;
-                &lt;select id="priority"&gt;
-                    &lt;option value="3"&gt;重要紧急&lt;/option&gt;
-                    &lt;option value="2"&gt;重要不紧急&lt;/option&gt;
-                    &lt;option value="1"&gt;紧急不重要&lt;/option&gt;
-                    &lt;option value="0"&gt;不重要不紧急&lt;/option&gt;
-                &lt;/select&gt;
-            &lt;/div&gt;
+                <div class="form-group">
+                    <label>优先级：</label>
+                    <div class="priority-options">
+                        <label>
+                            <input type="radio" name="priority" value="3" required> 重要紧急
+                        </label>
+                        <label>
+                            <input type="radio" name="priority" value="2"> 重要不紧急
+                        </label>
+                        <label>
+                            <input type="radio" name="priority" value="1"> 紧急不重要
+                        </label>
+                        <label>
+                            <input type="radio" name="priority" value="0"> 不重要不紧急
+                        </label>
+                    </div>
+                </div>
 
-            &lt;button type="submit"&gt;添加事项&lt;/button&gt;
-        &lt;/form&gt;
+                <button type="submit">添加事项</button>
+            </form>
 
-        &lt;div class="view-switch"&gt;
-            &lt;button onclick="switchView('global')"&gt;全局视图&lt;/button&gt;
-            &lt;button onclick="switchView('topic')"&gt;分类视图&lt;/button&gt;
-        &lt;/div&gt;
+            <!-- New configuration area -->
+            <div class="configuration">
+                <h1>Configuration</h1>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="showCompleted" checked> 显示已完成事项
+                    </label>
+                </div>
+            </div>
+        </div>
 
-        &lt;div id="todoList"&gt;&lt;/div&gt;
-    &lt;/div&gt;
+        <div class="main-content">
+            <div class="view-switch">
+                <label>
+                    <input type="radio" name="view" value="global" onclick="switchView('global')" checked> 全局优先级视图
+                </label>
+                <label>
+                    <input type="radio" name="view" value="topic" onclick="switchView('topic')"> 分类视图
+                </label>
+            </div>
+            <div id="todoList"></div>
+        </div>
+    </div>
 
-    &lt;script src="app.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+    <script src="app.js"></script>
+</body>
+</html>
