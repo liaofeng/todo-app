@@ -1,0 +1,54 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input, select, button {
+    padding: 8px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: var(--secondary-color);
+    color: white;
+    cursor: pointer;
+}
+
+.todo-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 5px solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.priority-3 { border-color: #e74c3c; background: #fadbd8; }
+.priority-2 { border-color: #f1c40f; background: #fcf3cf; }
+.priority-1 { border-color: #2ecc71; background: #d5f5e3; }
+.priority-0 { border-color: #95a5a6; background: #f8f9f9; }
+
+.topic-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.view-switch {
+    margin: 20px 0;
+    text-align: center;
+}
