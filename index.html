@@ -1,0 +1,47 @@
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;title&gt;Todo List&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;智能待办清单&lt;/h1&gt;
+        
+        &lt;form id="todoForm"&gt;
+            &lt;div class="form-group"&gt;
+                &lt;input type="text" id="title" placeholder="事项内容" required&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="form-group"&gt;
+                &lt;select id="topic"&gt;
+                    &lt;option value=""&gt;选择或输入分类&lt;/option&gt;
+                &lt;/select&gt;
+                &lt;input type="text" id="newTopic" placeholder="新建分类"&gt;
+            &lt;/div&gt;
+
+            &lt;div class="form-group"&gt;
+                &lt;select id="priority"&gt;
+                    &lt;option value="3"&gt;重要紧急&lt;/option&gt;
+                    &lt;option value="2"&gt;重要不紧急&lt;/option&gt;
+                    &lt;option value="1"&gt;紧急不重要&lt;/option&gt;
+                    &lt;option value="0"&gt;不重要不紧急&lt;/option&gt;
+                &lt;/select&gt;
+            &lt;/div&gt;
+
+            &lt;button type="submit"&gt;添加事项&lt;/button&gt;
+        &lt;/form&gt;
+
+        &lt;div class="view-switch"&gt;
+            &lt;button onclick="switchView('global')"&gt;全局视图&lt;/button&gt;
+            &lt;button onclick="switchView('topic')"&gt;分类视图&lt;/button&gt;
+        &lt;/div&gt;
+
+        &lt;div id="todoList"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
