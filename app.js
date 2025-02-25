@@ -7,68 +7,101 @@ const todoForm = document.getElementById('todoForm');
 const todoList = document.getElementById('todoList');
 const topicSelect = document.getElementById('topic');
 const newTopicInput = document.getElementById('newTopic');
+const submitButton = document.querySelector('#todoForm button[type="submit"]');
+
+// 标记当前是否处于编辑模式
+let editingTodoId = null;
 
 // 表单提交处理
-todoForm.addEventListener('submit', function(e) {
+todoForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    
+
     const title = document.getElementById('title').value;
     const priority = document.querySelector('input[name="priority"]:checked').value;
     const topic = newTopicInput.value || topicSelect.value;
-    
+
     if (title && topic) {
-        const newTodo = {
-            id: Date.now(),
-            title,
-            topic,
-            priority,
-            completed: false
-        };
-        
-        todos.push(newTodo);
-        if (!topics.includes(topic)) {
-            topics.push(topic);
-            updateTopicSelect();
+        if (editingTodoId) {
+            // 更新模式
+            const editedTodo = todos.find(t => t.id === editingTodoId);
+            if (editedTodo) {
+                // 更新待办事项
+                editedTodo.title = title;
+                editedTodo.priority = priority;
+                editedTodo.topic = topic;
+
+                // 如果是新主题，添加到主题列表
+                if (!topics.includes(topic)) {
+                    topics.push(topic);
+                    updateTopicSelect();
+                }
+
+                // 重置编辑模式
+                editingTodoId = null;
+                submitButton.textContent = '添加事项';
+                document.querySelector('.cancel-button').style.display = 'none';
+            }
+        } else {
+            // 添加模式
+            addNewTodo(title, topic, priority);
         }
-        
+
         localStorage.setItem('todos', JSON.stringify(todos));
         localStorage.setItem('topics', JSON.stringify(topics));
         renderTodos();
         todoForm.reset();
+        newTopicInput.value = '';
     }
 });
+
+// 添加新待办事项
+function addNewTodo(title, topic, priority) {
+    const newTodo = {
+        id: Date.now(),
+        title,
+        topic,
+        priority,
+        completed: false
+    };
+
+    todos.push(newTodo);
+    if (!topics.includes(topic)) {
+        topics.push(topic);
+        updateTopicSelect();
+    }
+}
 
 // 渲染待办事项
 function renderTodos() {
     todoList.innerHTML = '';
     const currentView = localStorage.getItem('currentView') || 'global';
-    
+
     // Set the correct radio button as checked
     document.querySelector(`input[name="view"][value="${currentView}"]`).checked = true;
-    
+
     const showCompleted = document.getElementById('showCompleted').checked;
     let filteredTodos = showCompleted ? todos : todos.filter(todo => !todo.completed);
-    
+
     // Sort todos so that completed ones are at the end
     filteredTodos = filteredTodos.sort((a, b) => a.completed - b.completed);
-    
+
     if (currentView === 'global') {
         // Sort by priority in descending order for global view
         filteredTodos = filteredTodos.sort((a, b) => b.priority - a.priority);
     }
-    
-    const grouped = currentView === 'global' ? 
-        groupByPriority(filteredTodos) : 
+
+    const grouped = currentView === 'global' ?
+        groupByPriority(filteredTodos) :
         groupByTopic(filteredTodos);
-    
+
     // Ensure consistent order of categories
     const orderedGroups = currentView === 'topic' ? Object.keys(grouped).sort() : Object.keys(grouped);
-    
+
     for (const group of orderedGroups) {
         const items = grouped[group];
         const groupElement = document.createElement('div');
         groupElement.innerHTML = `<h3>${group}</h3>`;
-        
+
         items.forEach(todo => {
             const todoElement = document.createElement('div');
             todoElement.className = `todo-item priority-${todo.priority} ${todo.completed ? 'completed' : ''}`;
@@ -85,7 +118,7 @@ function renderTodos() {
             `;
             groupElement.appendChild(todoElement);
         });
-        
+
         todoList.appendChild(groupElement);
     }
 }
@@ -94,7 +127,7 @@ function renderTodos() {
 function groupByPriority(items) {
     const priorityMap = {
         3: '重要紧急',
-        2: '重要不紧急', 
+        2: '重要不紧急',
         1: '紧急不重要',
         0: '不重要不紧急'
     };
@@ -132,81 +165,51 @@ function deleteTodo(id) {
 function editTodo(id) {
     const todo = todos.find(t => t.id === id);
     if (todo) {
+        // 设置表单为编辑模式
+        editingTodoId = todo.id;
+        // 填充表单
         document.getElementById('title').value = todo.title;
         document.querySelector(`input[name="priority"][value="${todo.priority}"]`).checked = true;
-        newTopicInput.value = todo.topic;
 
-        // Temporarily override the form submission for editing
-        todoForm.onsubmit = function(e) {
-            e.preventDefault();
-            updateTodo(todo);
-            todoForm.onsubmit = defaultFormSubmit; // Reset to default form submission after update
-        }
+        // 处理主题选择
+        if (topics.includes(todo.topic)) {
+            // 如果是已有主题，选中下拉列表对应选项
+            topicSelect.value = todo.topic;
+            newTopicInput.value = '';
+        } else {
+            // 如果是新主题，填入新主题输入框
+            topicSelect.value = '';
+            newTopicInput.value = todo.topic;
+         }
+
+        // 改变提交按钮文本
+        submitButton.textContent = '更新事项';
+        document.querySelector('.cancel-button').style.display = 'block';
+        
+        // 滚动到表单位置
+        todoForm.scrollIntoView({ behavior: 'smooth' }); 
     }
 }
 
-function updateTodo(todo) {
-    // Remove the old todo item
-    todos = todos.filter(t => t.id !== todo.id);
-
-    // Update the todo item with new values
-    Object.assign(todo, {
-        title: document.getElementById('title').value,
-        priority: document.querySelector('input[name="priority"]:checked').value,
-        topic: newTopicInput.value || topicSelect.value
-    });
-
-    // Add the updated todo back to the list
-    todos.push(todo);
-
-    localStorage.setItem('todos', JSON.stringify(todos));
-    renderTodos();
+// 取消编辑
+function cancelEdit() {
+    editingTodoId = null;
+    submitButton.textContent = '添加事项';
+    document.querySelector('.cancel-button').style.display = 'none';
     todoForm.reset();
-    todoForm.onsubmit = defaultFormSubmit; // Reset to default form submission
+    newTopicInput.value = '';
 }
 
-// Default form submission handler
-function defaultFormSubmit(e) {
-    e.preventDefault();
-    
-    const title = document.getElementById('title').value;
-    const priority = document.querySelector('input[name="priority"]:checked').value;
-    const topic = newTopicInput.value || topicSelect.value;
-    
-    if (title && topic) {
-        const newTodo = {
-            id: Date.now(),
-            title,
-            topic,
-            priority,
-            completed: false
-        };
-        
-        todos.push(newTodo);
-        if (!topics.includes(topic)) {
-            topics.push(topic);
-            updateTopicSelect();
-        }
-        
-        localStorage.setItem('todos', JSON.stringify(todos));
-        localStorage.setItem('topics', JSON.stringify(topics));
-        renderTodos();
-        todoForm.reset();
-    }
-}
-
-// Initialize the form's default submission handler
-todoForm.onsubmit = defaultFormSubmit;
 
 // 完成事项
 function completeTodo(id) {
     const todo = todos.find(t => t.id === id);
     if (todo) {
         todo.completed = !todo.completed;
-        
+
         // Sort todos by priority in descending order, then by completion status
         todos.sort((a, b) => b.priority - a.priority || a.completed - b.completed);
-        
+
         localStorage.setItem('todos', JSON.stringify(todos));
         renderTodos();
     }
@@ -227,7 +230,7 @@ function updateTopicSelect() {
 document.getElementById('showCompleted').checked = JSON.parse(localStorage.getItem('showCompleted')) || false;
 
 // Add event listener to the checkbox to re-render todos on change and save state
-document.getElementById('showCompleted').addEventListener('change', function() {
+document.getElementById('showCompleted').addEventListener('change', function () {
     localStorage.setItem('showCompleted', JSON.stringify(this.checked));
     renderTodos();
 });

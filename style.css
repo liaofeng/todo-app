@@ -195,3 +195,21 @@ button:hover {
 .todo-item:hover div:last-child {
     visibility: visible; /* Show the buttons when hovering over the todo item */
 }
+
+/* Styles for edit functionality */
+.form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.form-actions button {
+    flex: 1;
+}
+
+.cancel-button {
+    background-color: #6c757d;
+}
+
+.cancel-button:hover {
+    background-color: #5a6268;
+}
