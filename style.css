@@ -37,6 +37,19 @@ input, select, button {
     border-radius: 4px;
 }
 
+/* Add this new style for the title input */
+#title {
+    width: 90%;
+    box-sizing: border-box;
+}
+
+/* Add this new style for the new topic input */
+#newTopic {
+    width: 90%;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
 button {
     display: block;
     width: 100%;
