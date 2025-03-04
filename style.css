@@ -226,3 +226,66 @@ button:hover {
 .cancel-button:hover {
     background-color: #5a6268;
 }
+
+/* Topic header with edit button styles */
+.group-container {
+    margin-bottom: 20px;
+}
+
+.topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.topic-header h3 {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.edit-topic-button {
+    padding: 4px 8px;
+    font-size: 12px;
+    width: auto;
+    background-color: #6c757d;
+}
+
+.edit-topic-button:hover {
+    background-color: #5a6268;
+}
+
+/* Topic edit mode styles */
+.topic-edit-input {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.topic-edit-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.topic-edit-buttons button {
+    padding: 4px 8px;
+    font-size: 12px;
+    width: auto;
+}
+
+.confirm-topic-button {
+    background-color: #28a745;
+}
+
+.confirm-topic-button:hover {
+    background-color: #218838;
+}
+
+.cancel-topic-button {
+    background-color: #dc3545;
+}
+
+.cancel-topic-button:hover {
+    background-color: #c82333;
+}

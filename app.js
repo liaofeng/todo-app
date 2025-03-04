@@ -100,7 +100,35 @@ function renderTodos() {
     for (const group of orderedGroups) {
         const items = grouped[group];
         const groupElement = document.createElement('div');
-        groupElement.innerHTML = `<h3>${group}</h3>`;
+        groupElement.className = 'group-container';
+        
+        // 分类视图下，添加编辑按钮
+        if (currentView === 'topic') {
+            // 检查是否正在编辑当前分类
+            if (editingTopicName === group) {
+                // 编辑模式：显示编辑框和确认/取消按钮
+                groupElement.innerHTML = `
+                    <div class="topic-header">
+                        <input type="text" class="topic-edit-input" value="${group}">
+                        <div class="topic-edit-buttons">
+                            <button class="confirm-topic-button" onclick="confirmTopicEdit('${group}')">确认</button>
+                            <button class="cancel-topic-button" onclick="cancelTopicEdit()">取消</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 非编辑模式：显示分类名和编辑按钮
+                groupElement.innerHTML = `
+                    <div class="topic-header">
+                        <h3>${group}</h3>
+                        <button class="edit-topic-button" onclick="editTopic('${group}')">修改</button>
+                    </div>
+                `;
+            }
+        } else {
+            // 全局视图下保持原样
+            groupElement.innerHTML = `<h3>${group}</h3>`;
+        }
 
         items.forEach(todo => {
             const todoElement = document.createElement('div');
@@ -147,6 +175,9 @@ function groupByTopic(items) {
         return acc;
     }, {});
 }
+
+// 标记当前是否正在编辑分类
+let editingTopicName = null;
 
 // 视图切换
 function switchView(viewType) {
@@ -234,6 +265,65 @@ document.getElementById('showCompleted').addEventListener('change', function () 
     localStorage.setItem('showCompleted', JSON.stringify(this.checked));
     renderTodos();
 });
+
+// 开始编辑分类
+function editTopic(topicName) {
+    editingTopicName = topicName;
+    renderTodos();
+}
+
+// 确认分类编辑
+function confirmTopicEdit(oldTopicName) {
+    const newTopicName = document.querySelector('.topic-edit-input').value.trim();
+    
+    // 确保输入不为空
+    if (!newTopicName) {
+        alert('分类名称不能为空');
+        return;
+    }
+    
+    // 确保新名称与旧名称不同
+    if (newTopicName === oldTopicName) {
+        editingTopicName = null;
+        renderTodos();
+        return;
+    }
+    
+    // 更新todos中的topic
+    todos.forEach(todo => {
+        if (todo.topic === oldTopicName) {
+            todo.topic = newTopicName;
+        }
+    });
+    
+    // 更新topics数组
+    const index = topics.indexOf(oldTopicName);
+    if (index !== -1) {
+        topics.splice(index, 1);
+        
+        // 只有在topics中不存在新名称时才添加
+        if (!topics.includes(newTopicName)) {
+            topics.push(newTopicName);
+        }
+    }
+    
+    // 更新本地存储
+    localStorage.setItem('todos', JSON.stringify(todos));
+    localStorage.setItem('topics', JSON.stringify(topics));
+    
+    // 重置编辑模式
+    editingTopicName = null;
+    
+    // 重新渲染界面并更新下拉菜单
+    updateTopicSelect();
+    renderTodos();
+}
+
+// 取消分类编辑
+function cancelTopicEdit() {
+    editingTopicName = null;
+    renderTodos();
+}
 
 // 初始化
 updateTopicSelect();
